@@ -48,17 +48,21 @@ def fictive_module_of_bending():
 # gx1 при - 40С
 def fictive_voltage():
     Eф = fictive_module_of_bending()
-    dT = 293 - int(input("Температура в кельвінах: "))
+    dT = int(input("Температура в кельвінах: ")) - 20
     for g in list_of_g1:
         list_of_voltages = []
-        for i in range(4):
+        for i in range(5):
             formula_for_fictive_voltage = round((g - (-3 * 10**(-6) - (-0.19 * 10**(-6))) * dT * 104000) * Eф / 104000, 2)
             list_of_voltages.append(formula_for_fictive_voltage)
             dT -= 20
             print("gx" + str(i + 1) + ": " + str(formula_for_fictive_voltage))
 
-        x = [-40, -20, 0, +20]
+        x = [-40, -20, 0, +20, +40]
         plt.plot(x, list_of_voltages)
+        xmin, xmax = plt.xlim()
+        ymin, ymax = plt.ylim()
+        plt.xlim(-60, 60)
+        plt.ylim(-150, 150)
         ax = plt.gca()
         ax.spines['right'].set_color('none')
         ax.spines['top'].set_color('none')
@@ -71,6 +75,24 @@ def fictive_voltage():
     return list_of_voltages
 
 
+def fictive_voltage_for_one_er():
+    pass
+
+
+
+def fictive_voltage_x():
+    t = 20
+    tx = 0
+    L = 25
+    Y = 0.34
+    gf = 27.5
+    Ef = fictive_module_of_bending()
+    a0 = -0.19*10**(-6)
+    gfx = gf - ((L**2 * Y**2 * Ef)/24*gf**2) - (tx - t) * a0 * Ef
+    print(gfx)
+    return gfx
+
+
 if __name__ == '__main__':
     area_glass_tube(),
     print("---------")
@@ -81,3 +103,5 @@ if __name__ == '__main__':
     fictive_module_of_bending(),
     print("---------")
     fictive_voltage(),
+    print("---------")
+    fictive_voltage_x()
